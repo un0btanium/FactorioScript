@@ -116,6 +116,9 @@ Just make sure your variable names start with a lowercase letter.
 ![Missing tutorial](https://github.com/un0btanium/FactorioScript/blob/master/images/fstut.png)
 
 
+## More Complex Example
+
+![Missing example pic](https://github.com/un0btanium/FactorioScript/blob/master/images/fscomplex.png)
 
 ## Future features
 
