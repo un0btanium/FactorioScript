@@ -34,6 +34,7 @@ public class ArithmeticCombinator implements Combinator {
 		} else if (leftEntity.getClass() == ConstantCombinator.class) {
 			ConstantCombinator cc = (ConstantCombinator) leftEntity;
 			cc.addConnectionOut("green", entity.entity_number, 1);
+			arithmetic_conditions.first_signal = cc.getSignal();
 		}
 		
 		arithmetic_conditions.operation = operation;

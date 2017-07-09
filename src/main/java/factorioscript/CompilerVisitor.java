@@ -17,6 +17,7 @@ import antlr.FactorioScriptParser.VarExpContext;
 import entities.blueprint.Signal;
 import entities.compiler.ArithmeticCombinator;
 import entities.compiler.CompilerEntity;
+import entities.compiler.ConstantCombinator;
 import entities.compiler.Statement;
 import entities.compiler.StatementAdd;
 import entities.compiler.StatementList;
@@ -38,6 +39,7 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 	
 	@Override
 	public CompilerEntity visitMultipleStatementList(MultipleStatementListContext ctx) {
+		log("MultipleStatementList");
 		
 		Statement statement = (Statement) visit(ctx.s);
 		
@@ -50,6 +52,7 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 	
 	@Override
 	public CompilerEntity visitSingleStatementList(SingleStatementListContext ctx) {
+		log("SingleStatementList");
 		
 		Statement statement = (Statement) visit(ctx.s);
 		
@@ -62,11 +65,13 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 	
 	@Override
 	public CompilerEntity visitStatement(StatementContext ctx) {
+		log("StatementList");
 		return visit(ctx.getChild(0));
 	}
 	
 	@Override
 	public CompilerEntity visitCompilerStandard(CompilerStandardContext ctx) {
+		log("CompilerStandard");
 		standard_left = ctx.varLeft.getText();
 		standard_right = ctx.varRight.getText();
 		return new StatementNone();
@@ -74,17 +79,14 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 	
 	@Override
 	public CompilerEntity visitCompilerAlias(CompilerAliasContext ctx) {
+		log("CompilerAlias");
 		Signal.addAlias(ctx.varOld.getText(), ctx.varAlias.getText());
 		return new StatementNone();
 	}
 	
-//	@Override
-//	public CompilerEntity visitCompilerComment(CompilerCommentContext ctx) {
-//		return new StatementNone();
-//	}
-	
 	@Override
 	public CompilerEntity visitOverwriteStatementAssign(OverwriteStatementAssignContext ctx) {
+		log("OverwriteStatementAssign");
 
 		Variable variable = new Variable(ctx.var.getText());
 		CompilerEntity expression = visit(ctx.expr);
@@ -94,6 +96,7 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 	
 	@Override
 	public CompilerEntity visitAddStatementAssign(AddStatementAssignContext ctx) {
+		log("AddStatementAssign");
 
 		Variable variable = new Variable(ctx.var.getText());
 		CompilerEntity expression = visit(ctx.expr);
@@ -103,6 +106,7 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 	
 	@Override
 	public CompilerEntity visitSubStatementAssign(SubStatementAssignContext ctx) {
+		log("SubStatementAssign");
 
 		Variable variable = new Variable(ctx.var.getText());
 		CompilerEntity expression = visit(ctx.expr);
@@ -112,11 +116,13 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 	
 	@Override
 	public CompilerEntity visitPriorityExp(PriorityExpContext ctx) {
+		log("PriorityExp");
 		return visit(ctx.expr);
 	}
 	
 	@Override
 	public CompilerEntity visitAddSubExp(AddSubExpContext ctx) {
+		log("AddSubExp");
 		
 		ArithmeticCombinator ac = new ArithmeticCombinator();
 		ac.leftEntity = visit(ctx.left);
@@ -128,24 +134,29 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 		boolean rightIsNumber = ac.rightEntity.getClass() == Number.class;
 		if (ac.operation.equals("+")) {
 			if (leftIsNumber && rightIsNumber) {
-				// merge two constants
 				Number left = (Number) ac.leftEntity;
 				Number right = (Number) ac.rightEntity;
 				return new Number(left.getValue() + right.getValue());
 			} else if (leftIsNumber) {
-				// number can be put on the right to avoid unnecessary use of a constant combinator
 				CompilerEntity temp = ac.leftEntity;
 				ac.leftEntity = ac.rightEntity;
 				ac.rightEntity = temp;
 			}
 		} else {
 			if (leftIsNumber && rightIsNumber) {
-				// merge two constants
 				Number left = (Number) ac.leftEntity;
 				Number right = (Number) ac.rightEntity;
 				return new Number(left.getValue() - right.getValue());
+			} else if (leftIsNumber) {
+				// CREATE CONSTANT COMBINATOR IF LEFT IS NUMBER
+				ConstantCombinator cc = new ConstantCombinator();
+				Number number = (Number) ac.leftEntity;
+				cc.addSignal(standard_left, number.getValue());
+				ac.leftEntity = cc;
 			}
 		}
+		
+		
 		
 		// SET PARENT OF LEFT AND RIGHT ARITHMETICCOMBINATORS
 		if (ac.leftEntity.getClass() == ArithmeticCombinator.class) {
@@ -164,6 +175,7 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 	
 	@Override
 	public CompilerEntity visitMulDivExp(MulDivExpContext ctx) {
+		log("MulDivExp");
 		
 		ArithmeticCombinator ac = new ArithmeticCombinator();
 		ac.leftEntity = visit(ctx.left);
@@ -180,6 +192,7 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 				System.err.println("Dont divide/modulo by 0, you maniac!");
 		}
 		
+		
 		if (leftIsNumber && rightIsNumber) {
 			if (ac.operation.equals("*")) {
 				Number left = (Number) ac.leftEntity;
@@ -190,6 +203,21 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 				Number right = (Number) ac.rightEntity;
 				return new Number((int) ((0d + left.getValue()) / right.getValue()));
 			}
+		}
+
+		// SWITCH NUMBER TO RIGHT SIDE
+		if (ac.operation.equals("*") && ac.leftEntity.getClass() == Number.class) {
+			CompilerEntity temp = ac.leftEntity;
+			ac.leftEntity = ac.rightEntity;
+			ac.rightEntity = temp;
+		}
+		
+		// CREATE CONSTANT COMBINATOR IF LEFT IS NUMBER
+		if ( (ac.operation.equals("/") || ac.operation.equals("%") ) && leftIsNumber) {
+			ConstantCombinator cc = new ConstantCombinator();
+			Number number = (Number) ac.leftEntity;
+			cc.addSignal(standard_left, number.getValue());
+			ac.leftEntity = cc;
 		}
 		
 		// SET PARENT OF LEFT AND RIGHT ARITHMETICCOMBINATORS
@@ -209,15 +237,20 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 	
 	@Override
 	public CompilerEntity visitNumExp(NumExpContext ctx) {
+		log("NumExp");
 		return new Number(Integer.parseInt(ctx.number.getText()));
 	}
 	
 	
 	@Override
 	public CompilerEntity visitVarExp(VarExpContext ctx) {
+		log("VarExp");
 		if (!Signal.variableExists(ctx.getText()))
 			System.err.println("Variable " + ctx.getText() + " does not exist!");
 		return new Variable(ctx.getText());
 	}
 	
+	public void log(String str) {
+		//System.out.println(str);
+	}
 }

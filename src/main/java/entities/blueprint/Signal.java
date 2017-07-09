@@ -381,7 +381,7 @@ public class Signal {
 	}
 	
 	public static boolean variableExists(String var) {
-		return nameType.containsKey(var);
+		return nameType.containsKey(convertAlias(var));
 	}
 	
 	public static void addAlias(String oldVar, String newVar) {
