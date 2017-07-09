@@ -1,12 +1,17 @@
 package factorioscript;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -36,8 +41,7 @@ import entities.compiler.StatementList;
 public class App {
 
 	public static void main(String[] args) {
-		
-		
+
 		System.out.println();
 		System.out.println("\tFactorioScript v0.1.0");
 		System.out.println("\tby unobtanium");
@@ -53,66 +57,69 @@ public class App {
 			e.printStackTrace();
 			return;
 		}
-		
+
 		if (code.equals("")) {
 			System.out.println("\tNo code available!");
 			return;
 		}
-		
+
 		// SEND CODE TO ANTLR LEXER AND PARSER
 		System.out.println("\tDoing magic!");
-        CharStream charStream = null;
+		CharStream charStream = null;
 		charStream = new ANTLRInputStream(code);
-        FactorioScriptLexer lexer  = new FactorioScriptLexer(charStream);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        FactorioScriptParser parser = new FactorioScriptParser(tokens);
-        
-        // SEND PARSETREE TO VISITOR
-        System.out.println("\tMore magic!");
-        CompilerVisitor compilerVisitor = new CompilerVisitor();
-        CompilerEntity compilerEntity = compilerVisitor.visit(parser.statementList());
-        
-        // EXTRACT BLUEPRINT ENTITIES FROM COMPILER ENTITIES
+		FactorioScriptLexer lexer = new FactorioScriptLexer(charStream);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		FactorioScriptParser parser = new FactorioScriptParser(tokens);
+
+		// SEND PARSETREE TO VISITOR
+		System.out.println("\tMore magic!");
+		CompilerVisitor compilerVisitor = new CompilerVisitor();
+		CompilerEntity compilerEntity = compilerVisitor.visit(parser.statementList());
+
+		// EXTRACT BLUEPRINT ENTITIES FROM COMPILER ENTITIES
 		System.out.println("\tAlmost done!");
-        StatementList statementList = (StatementList) compilerEntity;
-        EntityGatherer entityGatherer = new EntityGatherer("small-electric-pole");
-        statementList.getEntities(entityGatherer);
-        
-        // PUT ENTITIES IN BLUEPRINT
+		StatementList statementList = (StatementList) compilerEntity;
+		EntityGatherer entityGatherer = new EntityGatherer("small-electric-pole");
+		statementList.getEntities(entityGatherer);
+
+		// PUT ENTITIES IN BLUEPRINT
 		System.out.println("\tCreating blueprint string!");
-        Blueprint blueprint = new Blueprint();
-        Entity[] entities = new Entity[entityGatherer.entities.size()];
-        blueprint.entities = entityGatherer.entities.toArray(entities);
-        blueprint.item = "blueprint";
-        blueprint.label = "FactoryScript by unobtanium";
-        blueprint.icons = new Icon[]{new Icon(1, new Signal("arithmetic-combinator"))};
-        BlueprintRoot blueprintRoot = new BlueprintRoot();
-        blueprintRoot.blueprint = blueprint;
-        
-        // CREATE BLUEPRINT STRING
-        String blueprintString = "0" + encode(compress(getStringFromBlueprintRoot(blueprintRoot)));
-        System.out.println();
+		Blueprint blueprint = new Blueprint();
+		Entity[] entities = new Entity[entityGatherer.entities.size()];
+		blueprint.entities = entityGatherer.entities.toArray(entities);
+		blueprint.item = "blueprint";
+		blueprint.label = "FactoryScript by unobtanium";
+		blueprint.icons = new Icon[] { new Icon(1, new Signal("arithmetic-combinator")) };
+		BlueprintRoot blueprintRoot = new BlueprintRoot();
+		blueprintRoot.blueprint = blueprint;
+
+		// CREATE BLUEPRINT STRING
+		String blueprintString = "0" + encode(compress(getStringFromBlueprintRoot(blueprintRoot)));
+		System.out.println();
 		System.out.println(blueprintString);
-        System.out.println();
-		
+		System.out.println();
+
 		// GENERATE OUTPUT FILE
 		File file = new File(args[0]);
 		String path = file.getPath();
 		String directory = path.substring(0, path.lastIndexOf(System.getProperty("file.separator")));
 		directory += System.getProperty("file.separator") + "blueprint.txt";
 		System.out.println("\tExporting blueprint string into: " + directory);
-		try {
-			Files.write(Paths.get(directory), blueprintString.getBytes(), StandardOpenOption.CREATE);
+		try (
+			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(directory), "utf-8"))) {
+			writer.write(blueprintString);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-        System.out.println();
+		System.out.println();
 		System.out.println("\tFinished!");
-        System.out.println();
-        System.out.println();
-		
-		
+		System.out.println();
+		System.out.println();
 
 		//
 		// byte[] blueprintDecoded = decode(blueprintString);

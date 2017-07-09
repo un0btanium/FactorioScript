@@ -31,6 +31,14 @@ public class ConstantCombinator implements Combinator {
 	public void addSignal(String name, int amount) {
 		filters.add(new Filter(new Signal(name), amount, filters.size()+1));
 	}
+
+	/**
+	 * 
+	 * @return the first signal in the constant combinator
+	 */
+	public Signal getSignal() {
+		return filters.get(0).signal;
+	}
 	
 	/**
 	 * Connects the constant combinator output with the entity associated with the given entity.

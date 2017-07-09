@@ -22,7 +22,7 @@ statementIf			: IF BRACKET_OPEN condition BRACKET_CLOSE BRACE_OPEN statementList
 					| IF BRACKET_OPEN condition BRACKET_CLOSE BRACE_OPEN statementList BRACE_CLOSE ELSE BRACKET_OPEN condition BRACKET_CLOSE BRACE_OPEN statementList BRACE_CLOSE #ifElseStatement
 					| IF BRACKET_OPEN condition BRACKET_CLOSE BRACE_OPEN statementList BRACE_CLOSE #ifStatement
 					;
-
+					
 expression			: BRACKET_OPEN expr=expression BRACKET_CLOSE							#priorityExp
 					| left=expression operand=(ASTERISK|SLASH|MODULO) right=expression		#mulDivExp
 					| left=expression operand=(PLUS|MINUS) right=expression					#addSubExp
