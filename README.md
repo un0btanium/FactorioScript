@@ -1,3 +1,5 @@
+![Missing title image](https://github.com/un0btanium/FactorioScript/blob/master/images/factorioscript.png)
+
 # FactorioScript
 A compiler for the game Factorio to allow the use of programming code to generate combinator logic, which can then be imported via blueprint strings into the game.
 
