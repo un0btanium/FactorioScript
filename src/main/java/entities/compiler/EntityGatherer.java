@@ -13,24 +13,31 @@ public class EntityGatherer {
 	public PowerPoleType pole;
 	public Entity lastOutputEntity;
 	public Entity lastInputEntity;
+	private int powerPolesPlaced;
+	private int powerPoleOffset;
 	
-	public EntityGatherer(String powerPole) {
+	public EntityGatherer() {
 		this.offsetX = 0;
 		this.offsetY = 0;
 		this.entities = new ArrayList<>();
-		this.pole = PowerPole.powerPoleTypes.get(powerPole);
+		this.pole = PowerPole.powerPoleTypes.get(PowerPole.powerPole);
 		this.lastOutputEntity = null;
+		this.powerPolesPlaced = 0;
+		this.powerPoleOffset = pole.maxSpace/2 + ((PowerPole.powerPole.equals("medium")) ? 1 : 0);
 	}
 	
 	public void checkForPowerPole() {
-		if (offsetY%(pole.maxSpace+pole.size) == 0) {
-			// TODO improve power pole horizontal placement
-			for (int i = 0; i < 3; i++) {
-				Entity entity = new Entity(pole.name);
-				entity.position = new Position(i*(pole.maxSpace+pole.size), offsetY);
-				entities.add(entity);
-			}
+		// TODO improve power pole horizontal placement
+		if (offsetY == powerPoleOffset + powerPolesPlaced * (pole.maxSpace+pole.size)) {
+			System.out.println("Space added " + offsetY);
 			offsetY += pole.size;
+			powerPolesPlaced++;
+		}
+		if (offsetY == powerPolesPlaced * (pole.maxSpace+pole.size)) {
+			System.out.println("Pole placed " + offsetY);
+			Entity entity = new Entity(pole.name);
+			entity.position = new Position(pole.maxSpace/2, powerPoleOffset + powerPolesPlaced * (pole.maxSpace+pole.size));
+			entities.add(entity);
 		}
 	}
 	

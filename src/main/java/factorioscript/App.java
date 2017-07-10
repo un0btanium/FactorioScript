@@ -43,7 +43,7 @@ public class App {
 	public static void main(String[] args) {
 
 		System.out.println();
-		System.out.println("\tFactorioScript v0.1.0");
+		System.out.println("\tFactorioScript v0.1.1");
 		System.out.println("\tby unobtanium");
 		System.out.println();
 		// READ CODE IN FROM FILE
@@ -79,7 +79,7 @@ public class App {
 		// EXTRACT BLUEPRINT ENTITIES FROM COMPILER ENTITIES
 		System.out.println("\tAlmost done!");
 		StatementList statementList = (StatementList) compilerEntity;
-		EntityGatherer entityGatherer = new EntityGatherer("small-electric-pole");
+		EntityGatherer entityGatherer = new EntityGatherer();
 		statementList.getEntities(entityGatherer);
 
 		// PUT ENTITIES IN BLUEPRINT

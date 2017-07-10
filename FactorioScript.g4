@@ -11,6 +11,7 @@ statement			: statementCompiler
 
 statementCompiler	: COMPILERSIGN STANDARD ALIASASSIGN varLeft=VAR varRight=VAR								#CompilerStandard
 					| COMPILERSIGN ALIAS varOld=VAR ALIASASSIGN varAlias=VAR									#CompilerAlias
+					| COMPILERSIGN POWERPOLE pole=(SMALL|MEDIUM|SUBSTATION)										#CompilerPowerpole
 					;
 
 statementAssign		: var=VAR ASSIGN expr=expression  															#overwriteStatementAssign
@@ -38,6 +39,11 @@ COMPILERSIGN		: '#' ;
 STANDARD			: ('standard'|'STANDARD') ;
 ALIAS				: ('alias'|'ALIAS') ;
 ALIASASSIGN			: '=>' ;
+POWERPOLE			: ('powerpole'|'POWERPOLE') ;
+SMALL				: ('small'|'SMALL') ;
+MEDIUM				: ('medium'|'MEDIUM') ;
+SUBSTATION			: ('substation'|'SUBSTATION') ;
+
 
 IF					: ('if'|'IF') ;
 ELSEIF				: ('elseif'|'ELSEIF') ;

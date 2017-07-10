@@ -5,6 +5,7 @@ import antlr.FactorioScriptParser.AddStatementAssignContext;
 import antlr.FactorioScriptParser.AddSubExpContext;
 import antlr.FactorioScriptParser.BitExpContext;
 import antlr.FactorioScriptParser.CompilerAliasContext;
+import antlr.FactorioScriptParser.CompilerPowerpoleContext;
 import antlr.FactorioScriptParser.CompilerStandardContext;
 import antlr.FactorioScriptParser.MulDivModExpContext;
 import antlr.FactorioScriptParser.MultipleStatementListContext;
@@ -27,6 +28,7 @@ import entities.compiler.StatementNone;
 import entities.compiler.StatementOverwrite;
 import entities.compiler.StatementSub;
 import entities.compiler.Number;
+import entities.compiler.PowerPole;
 import entities.compiler.Variable;
 
 public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> {
@@ -85,6 +87,17 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 		Signal.addAlias(ctx.varOld.getText(), ctx.varAlias.getText());
 		return new StatementNone();
 	}
+	
+	@Override
+	public CompilerEntity visitCompilerPowerpole(CompilerPowerpoleContext ctx) {
+		log("CompilerPowerpole");
+		
+		PowerPole.powerPole = ctx.pole.getText();
+		
+		return new StatementNone();
+	}
+	
+	
 	
 	@Override
 	public CompilerEntity visitOverwriteStatementAssign(OverwriteStatementAssignContext ctx) {
