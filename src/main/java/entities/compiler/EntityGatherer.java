@@ -29,12 +29,10 @@ public class EntityGatherer {
 	public void checkForPowerPole() {
 		// TODO improve power pole horizontal placement
 		if (offsetY == powerPoleOffset + powerPolesPlaced * (pole.maxSpace+pole.size)) {
-			System.out.println("Space added " + offsetY);
 			offsetY += pole.size;
 			powerPolesPlaced++;
 		}
 		if (offsetY == powerPolesPlaced * (pole.maxSpace+pole.size)) {
-			System.out.println("Pole placed " + offsetY);
 			Entity entity = new Entity(pole.name);
 			entity.position = new Position(pole.maxSpace/2, powerPoleOffset + powerPolesPlaced * (pole.maxSpace+pole.size));
 			entities.add(entity);
