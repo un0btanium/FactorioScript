@@ -76,6 +76,18 @@ public class FactorioScriptBaseListener implements FactorioScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCompilerPowerpole(FactorioScriptParser.CompilerPowerpoleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCompilerPowerpole(FactorioScriptParser.CompilerPowerpoleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterOverwriteStatementAssign(FactorioScriptParser.OverwriteStatementAssignContext ctx) { }
 	/**
 	 * {@inheritDoc}

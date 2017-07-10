@@ -52,6 +52,13 @@ public class FactorioScriptBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitCompilerPowerpole(FactorioScriptParser.CompilerPowerpoleContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitOverwriteStatementAssign(FactorioScriptParser.OverwriteStatementAssignContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

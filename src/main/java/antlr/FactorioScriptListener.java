@@ -66,6 +66,18 @@ public interface FactorioScriptListener extends ParseTreeListener {
 	 */
 	void exitCompilerAlias(FactorioScriptParser.CompilerAliasContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code CompilerPowerpole}
+	 * labeled alternative in {@link FactorioScriptParser#statementCompiler}.
+	 * @param ctx the parse tree
+	 */
+	void enterCompilerPowerpole(FactorioScriptParser.CompilerPowerpoleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CompilerPowerpole}
+	 * labeled alternative in {@link FactorioScriptParser#statementCompiler}.
+	 * @param ctx the parse tree
+	 */
+	void exitCompilerPowerpole(FactorioScriptParser.CompilerPowerpoleContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code overwriteStatementAssign}
 	 * labeled alternative in {@link FactorioScriptParser#statementAssign}.
 	 * @param ctx the parse tree

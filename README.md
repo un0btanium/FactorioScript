@@ -6,7 +6,7 @@ A compiler for the game Factorio to allow the use of programming code to generat
 
 ## Releases
 
-Check the [release page](https://github.com/un0btanium/FactorioScript/releases) for the up-to-date versions.
+Check the [release page](https://github.com/un0btanium/FactorioScript/releases) to download the up-to-date version.
 
 ## Use
 
@@ -30,7 +30,7 @@ You can copy values from other variables/signals over:
 iron-ore = copper-ore
 ```
 
-You can use math expressions:
+You can use math operators (addition, subtraction, division, multiplication, modulo, power):
 
 ```FactorioScript
 iron-ore = 21 + 21
@@ -38,6 +38,7 @@ iron-ore = 84 - 42
 iron-ore = 164 / 4
 iron-ore = 6 * 7
 iron-ore = 142 % 100
+iron-ore = 2 ^ 10
 ```
 
 Of course, you can do math with variables/signals as well:
@@ -72,6 +73,16 @@ iron-ore = iron-ore - 42
 iron-ore -= 42
 ```
 
+You can use bit-shift and bitwise operators as well:
+
+```FactorioScript
+iron-ore = signal-A << signal-B
+iron-ore = signal-A >> signal-B
+iron-ore = signal-A AND signal-B
+iron-ore = signal-A OR signal-B
+iron-ore = signal-A XOR signal-B
+```
+
 ### Compiler Settings
 
 There are a few, but very powerful compiler settings you can use.  
@@ -90,6 +101,21 @@ iron-ore = copper-ore + 42
 ```
 
 Just make sure your variable names start with a lowercase letter.
+
+There are some aliases already predefined. For example *signal-A* is available as *signal-a* and *a*. Color signals like *signal-blue* are available as *blue* as well.
+
+**Power poles**
+You can define the type of power pole used and the program will space them out accordingly. There are available: small , medium and substation.
+The standard is small power poles.
+
+The above would be the same as:
+```FactorioScript
+# POWERPOLE small
+# POWERPOLE medium
+# POWERPOLE substation
+```
+
+
 
 **Standard temporary variables**  
 This one will probably be very rarely used and is not as easy to explain, but bare with me.
@@ -126,11 +152,10 @@ If you dont do that, your results will be messed up.
 
 Well, i would like to add everything, but here is a good starting selection:
 
-* power and other operators
 * More direct assign statements (*=, /=, ^=, ect)
+* Allow the import of variable/signal names and aliases from a file.
 * IF statements
-* select your power pole of choice
-* Math and Util library
+* Math and Util (e.g. return max or min) library
 
 
 ## Libraries

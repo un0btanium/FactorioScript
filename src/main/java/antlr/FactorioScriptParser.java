@@ -17,11 +17,12 @@ public class FactorioScriptParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		COMPILERSIGN=1, STANDARD=2, ALIAS=3, ALIASASSIGN=4, IF=5, ELSEIF=6, ELSE=7, 
-		BRACKET_OPEN=8, BRACKET_CLOSE=9, BRACE_OPEN=10, BRACE_CLOSE=11, ASTERISK=12, 
-		SLASH=13, MODULO=14, PLUS=15, MINUS=16, BIT_LEFT=17, BIT_RIGHT=18, BIT_AND=19, 
-		BIT_OR=20, BIT_XOR=21, POWER=22, EQUAL=23, NOTEQUAL=24, GREATER=25, LOWER=26, 
-		GREATEREQUAL=27, LOWEREQUAL=28, ASSIGN=29, NUMBER=30, VAR=31, WS=32;
+		COMPILERSIGN=1, STANDARD=2, ALIAS=3, ALIASASSIGN=4, POWERPOLE=5, SMALL=6, 
+		MEDIUM=7, SUBSTATION=8, IF=9, ELSEIF=10, ELSE=11, BRACKET_OPEN=12, BRACKET_CLOSE=13, 
+		BRACE_OPEN=14, BRACE_CLOSE=15, ASTERISK=16, SLASH=17, MODULO=18, PLUS=19, 
+		MINUS=20, BIT_LEFT=21, BIT_RIGHT=22, BIT_AND=23, BIT_OR=24, BIT_XOR=25, 
+		POWER=26, EQUAL=27, NOTEQUAL=28, GREATER=29, LOWER=30, GREATEREQUAL=31, 
+		LOWEREQUAL=32, ASSIGN=33, NUMBER=34, VAR=35, WS=36;
 	public static final int
 		RULE_statementList = 0, RULE_statement = 1, RULE_statementCompiler = 2, 
 		RULE_statementAssign = 3, RULE_statementIf = 4, RULE_expression = 5, RULE_condition = 6;
@@ -31,16 +32,18 @@ public class FactorioScriptParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'#'", null, null, "'=>'", null, null, null, "'('", "')'", "'{'", 
-		"'}'", "'*'", "'/'", "'%'", "'+'", "'-'", "'<<'", "'>>'", "'AND'", "'OR'", 
-		"'XOR'", "'^'", "'=='", "'!='", "'>'", "'<'", "'>='", "'<='", "'='"
+		null, "'#'", null, null, "'=>'", null, null, null, null, null, null, null, 
+		"'('", "')'", "'{'", "'}'", "'*'", "'/'", "'%'", "'+'", "'-'", "'<<'", 
+		"'>>'", "'AND'", "'OR'", "'XOR'", "'^'", "'=='", "'!='", "'>'", "'<'", 
+		"'>='", "'<='", "'='"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "COMPILERSIGN", "STANDARD", "ALIAS", "ALIASASSIGN", "IF", "ELSEIF", 
-		"ELSE", "BRACKET_OPEN", "BRACKET_CLOSE", "BRACE_OPEN", "BRACE_CLOSE", 
-		"ASTERISK", "SLASH", "MODULO", "PLUS", "MINUS", "BIT_LEFT", "BIT_RIGHT", 
-		"BIT_AND", "BIT_OR", "BIT_XOR", "POWER", "EQUAL", "NOTEQUAL", "GREATER", 
-		"LOWER", "GREATEREQUAL", "LOWEREQUAL", "ASSIGN", "NUMBER", "VAR", "WS"
+		null, "COMPILERSIGN", "STANDARD", "ALIAS", "ALIASASSIGN", "POWERPOLE", 
+		"SMALL", "MEDIUM", "SUBSTATION", "IF", "ELSEIF", "ELSE", "BRACKET_OPEN", 
+		"BRACKET_CLOSE", "BRACE_OPEN", "BRACE_CLOSE", "ASTERISK", "SLASH", "MODULO", 
+		"PLUS", "MINUS", "BIT_LEFT", "BIT_RIGHT", "BIT_AND", "BIT_OR", "BIT_XOR", 
+		"POWER", "EQUAL", "NOTEQUAL", "GREATER", "LOWER", "GREATEREQUAL", "LOWEREQUAL", 
+		"ASSIGN", "NUMBER", "VAR", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -318,12 +321,35 @@ public class FactorioScriptParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class CompilerPowerpoleContext extends StatementCompilerContext {
+		public Token pole;
+		public TerminalNode COMPILERSIGN() { return getToken(FactorioScriptParser.COMPILERSIGN, 0); }
+		public TerminalNode POWERPOLE() { return getToken(FactorioScriptParser.POWERPOLE, 0); }
+		public TerminalNode SMALL() { return getToken(FactorioScriptParser.SMALL, 0); }
+		public TerminalNode MEDIUM() { return getToken(FactorioScriptParser.MEDIUM, 0); }
+		public TerminalNode SUBSTATION() { return getToken(FactorioScriptParser.SUBSTATION, 0); }
+		public CompilerPowerpoleContext(StatementCompilerContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FactorioScriptListener ) ((FactorioScriptListener)listener).enterCompilerPowerpole(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FactorioScriptListener ) ((FactorioScriptListener)listener).exitCompilerPowerpole(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FactorioScriptVisitor ) return ((FactorioScriptVisitor<? extends T>)visitor).visitCompilerPowerpole(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 
 	public final StatementCompilerContext statementCompiler() throws RecognitionException {
 		StatementCompilerContext _localctx = new StatementCompilerContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_statementCompiler);
+		int _la;
 		try {
-			setState(35);
+			setState(38);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 			case 1:
@@ -356,6 +382,27 @@ public class FactorioScriptParser extends Parser {
 				match(ALIASASSIGN);
 				setState(34);
 				((CompilerAliasContext)_localctx).varAlias = match(VAR);
+				}
+				break;
+			case 3:
+				_localctx = new CompilerPowerpoleContext(_localctx);
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(35);
+				match(COMPILERSIGN);
+				setState(36);
+				match(POWERPOLE);
+				setState(37);
+				((CompilerPowerpoleContext)_localctx).pole = _input.LT(1);
+				_la = _input.LA(1);
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << SMALL) | (1L << MEDIUM) | (1L << SUBSTATION))) != 0)) ) {
+					((CompilerPowerpoleContext)_localctx).pole = (Token)_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
 				}
 				break;
 			}
@@ -458,18 +505,18 @@ public class FactorioScriptParser extends Parser {
 		StatementAssignContext _localctx = new StatementAssignContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_statementAssign);
 		try {
-			setState(48);
+			setState(51);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				_localctx = new OverwriteStatementAssignContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(37);
+				setState(40);
 				((OverwriteStatementAssignContext)_localctx).var = match(VAR);
-				setState(38);
+				setState(41);
 				match(ASSIGN);
-				setState(39);
+				setState(42);
 				((OverwriteStatementAssignContext)_localctx).expr = expression(0);
 				}
 				break;
@@ -477,13 +524,13 @@ public class FactorioScriptParser extends Parser {
 				_localctx = new AddStatementAssignContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(40);
-				((AddStatementAssignContext)_localctx).var = match(VAR);
-				setState(41);
-				match(PLUS);
-				setState(42);
-				match(ASSIGN);
 				setState(43);
+				((AddStatementAssignContext)_localctx).var = match(VAR);
+				setState(44);
+				match(PLUS);
+				setState(45);
+				match(ASSIGN);
+				setState(46);
 				((AddStatementAssignContext)_localctx).expr = expression(0);
 				}
 				break;
@@ -491,13 +538,13 @@ public class FactorioScriptParser extends Parser {
 				_localctx = new SubStatementAssignContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(44);
-				((SubStatementAssignContext)_localctx).var = match(VAR);
-				setState(45);
-				match(MINUS);
-				setState(46);
-				match(ASSIGN);
 				setState(47);
+				((SubStatementAssignContext)_localctx).var = match(VAR);
+				setState(48);
+				match(MINUS);
+				setState(49);
+				match(ASSIGN);
+				setState(50);
 				((SubStatementAssignContext)_localctx).expr = expression(0);
 				}
 				break;
@@ -650,54 +697,54 @@ public class FactorioScriptParser extends Parser {
 		StatementIfContext _localctx = new StatementIfContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_statementIf);
 		try {
-			setState(95);
+			setState(98);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				_localctx = new IfElseIfElseStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(50);
-				match(IF);
-				setState(51);
-				match(BRACKET_OPEN);
-				setState(52);
-				condition();
 				setState(53);
-				match(BRACKET_CLOSE);
+				match(IF);
 				setState(54);
-				match(BRACE_OPEN);
+				match(BRACKET_OPEN);
 				setState(55);
-				statementList();
+				condition();
 				setState(56);
-				match(BRACE_CLOSE);
+				match(BRACKET_CLOSE);
 				setState(57);
-				match(ELSEIF);
+				match(BRACE_OPEN);
 				setState(58);
-				match(BRACKET_OPEN);
+				statementList();
 				setState(59);
-				condition();
-				setState(60);
-				match(BRACKET_CLOSE);
-				setState(61);
-				match(BRACE_OPEN);
-				setState(62);
-				statementList();
-				setState(63);
 				match(BRACE_CLOSE);
-				setState(64);
-				match(ELSE);
-				setState(65);
+				setState(60);
+				match(ELSEIF);
+				setState(61);
 				match(BRACKET_OPEN);
-				setState(66);
+				setState(62);
 				condition();
-				setState(67);
+				setState(63);
 				match(BRACKET_CLOSE);
-				setState(68);
+				setState(64);
 				match(BRACE_OPEN);
-				setState(69);
+				setState(65);
 				statementList();
+				setState(66);
+				match(BRACE_CLOSE);
+				setState(67);
+				match(ELSE);
+				setState(68);
+				match(BRACKET_OPEN);
+				setState(69);
+				condition();
 				setState(70);
+				match(BRACKET_CLOSE);
+				setState(71);
+				match(BRACE_OPEN);
+				setState(72);
+				statementList();
+				setState(73);
 				match(BRACE_CLOSE);
 				}
 				break;
@@ -705,33 +752,33 @@ public class FactorioScriptParser extends Parser {
 				_localctx = new IfElseStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(72);
-				match(IF);
-				setState(73);
-				match(BRACKET_OPEN);
-				setState(74);
-				condition();
 				setState(75);
-				match(BRACKET_CLOSE);
+				match(IF);
 				setState(76);
-				match(BRACE_OPEN);
-				setState(77);
-				statementList();
-				setState(78);
-				match(BRACE_CLOSE);
-				setState(79);
-				match(ELSE);
-				setState(80);
 				match(BRACKET_OPEN);
-				setState(81);
+				setState(77);
 				condition();
-				setState(82);
+				setState(78);
 				match(BRACKET_CLOSE);
-				setState(83);
+				setState(79);
 				match(BRACE_OPEN);
-				setState(84);
+				setState(80);
 				statementList();
+				setState(81);
+				match(BRACE_CLOSE);
+				setState(82);
+				match(ELSE);
+				setState(83);
+				match(BRACKET_OPEN);
+				setState(84);
+				condition();
 				setState(85);
+				match(BRACKET_CLOSE);
+				setState(86);
+				match(BRACE_OPEN);
+				setState(87);
+				statementList();
+				setState(88);
 				match(BRACE_CLOSE);
 				}
 				break;
@@ -739,19 +786,19 @@ public class FactorioScriptParser extends Parser {
 				_localctx = new IfStatementContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(87);
-				match(IF);
-				setState(88);
-				match(BRACKET_OPEN);
-				setState(89);
-				condition();
 				setState(90);
-				match(BRACKET_CLOSE);
+				match(IF);
 				setState(91);
-				match(BRACE_OPEN);
+				match(BRACKET_OPEN);
 				setState(92);
-				statementList();
+				condition();
 				setState(93);
+				match(BRACKET_CLOSE);
+				setState(94);
+				match(BRACE_OPEN);
+				setState(95);
+				statementList();
+				setState(96);
 				match(BRACE_CLOSE);
 				}
 				break;
@@ -964,7 +1011,7 @@ public class FactorioScriptParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(104);
+			setState(107);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case BRACKET_OPEN:
@@ -973,11 +1020,11 @@ public class FactorioScriptParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(98);
+				setState(101);
 				match(BRACKET_OPEN);
-				setState(99);
+				setState(102);
 				((PriorityExpContext)_localctx).expr = expression(0);
-				setState(100);
+				setState(103);
 				match(BRACKET_CLOSE);
 				}
 				break;
@@ -986,7 +1033,7 @@ public class FactorioScriptParser extends Parser {
 				_localctx = new VarExpContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(102);
+				setState(105);
 				((VarExpContext)_localctx).variable = match(VAR);
 				}
 				break;
@@ -995,7 +1042,7 @@ public class FactorioScriptParser extends Parser {
 				_localctx = new NumExpContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(103);
+				setState(106);
 				((NumExpContext)_localctx).number = match(NUMBER);
 				}
 				break;
@@ -1003,7 +1050,7 @@ public class FactorioScriptParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(120);
+			setState(123);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -1011,7 +1058,7 @@ public class FactorioScriptParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(118);
+					setState(121);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 					case 1:
@@ -1019,9 +1066,9 @@ public class FactorioScriptParser extends Parser {
 						_localctx = new MulDivModExpContext(new ExpressionContext(_parentctx, _parentState));
 						((MulDivModExpContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(106);
+						setState(109);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(107);
+						setState(110);
 						((MulDivModExpContext)_localctx).operand = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ASTERISK) | (1L << SLASH) | (1L << MODULO))) != 0)) ) {
@@ -1032,7 +1079,7 @@ public class FactorioScriptParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(108);
+						setState(111);
 						((MulDivModExpContext)_localctx).right = expression(7);
 						}
 						break;
@@ -1041,9 +1088,9 @@ public class FactorioScriptParser extends Parser {
 						_localctx = new AddSubExpContext(new ExpressionContext(_parentctx, _parentState));
 						((AddSubExpContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(109);
+						setState(112);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(110);
+						setState(113);
 						((AddSubExpContext)_localctx).operand = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==PLUS || _la==MINUS) ) {
@@ -1054,7 +1101,7 @@ public class FactorioScriptParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(111);
+						setState(114);
 						((AddSubExpContext)_localctx).right = expression(6);
 						}
 						break;
@@ -1063,9 +1110,9 @@ public class FactorioScriptParser extends Parser {
 						_localctx = new BitExpContext(new ExpressionContext(_parentctx, _parentState));
 						((BitExpContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(112);
+						setState(115);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(113);
+						setState(116);
 						((BitExpContext)_localctx).operand = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BIT_LEFT) | (1L << BIT_RIGHT) | (1L << BIT_AND) | (1L << BIT_OR) | (1L << BIT_XOR))) != 0)) ) {
@@ -1076,7 +1123,7 @@ public class FactorioScriptParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(114);
+						setState(117);
 						((BitExpContext)_localctx).right = expression(5);
 						}
 						break;
@@ -1085,18 +1132,18 @@ public class FactorioScriptParser extends Parser {
 						_localctx = new PowExpContext(new ExpressionContext(_parentctx, _parentState));
 						((PowExpContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(115);
+						setState(118);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(116);
+						setState(119);
 						match(POWER);
-						setState(117);
+						setState(120);
 						((PowExpContext)_localctx).right = expression(3);
 						}
 						break;
 					}
 					} 
 				}
-				setState(122);
+				setState(125);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			}
@@ -1152,9 +1199,9 @@ public class FactorioScriptParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(123);
+			setState(126);
 			expression(0);
-			setState(124);
+			setState(127);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQUAL) | (1L << NOTEQUAL) | (1L << GREATER) | (1L << LOWER) | (1L << GREATEREQUAL) | (1L << LOWEREQUAL))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1164,7 +1211,7 @@ public class FactorioScriptParser extends Parser {
 				_errHandler.reportMatch(this);
 				consume();
 			}
-			setState(125);
+			setState(128);
 			expression(0);
 			}
 		}
@@ -1201,38 +1248,39 @@ public class FactorioScriptParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\"\u0082\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3&\u0085\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\3\2\3\2\3\2\3\2\5\2\25"+
-		"\n\2\3\3\3\3\3\3\5\3\32\n\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5"+
-		"\4&\n\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5\63\n\5\3\6\3\6"+
-		"\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3"+
+		"\n\2\3\3\3\3\3\3\5\3\32\n\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3"+
+		"\4\3\4\3\4\5\4)\n\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5\66"+
+		"\n\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3"+
 		"\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6"+
-		"\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6b\n\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7"+
-		"\5\7k\n\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\7\7y\n\7\f\7"+
-		"\16\7|\13\7\3\b\3\b\3\b\3\b\3\b\2\3\f\t\2\4\6\b\n\f\16\2\6\3\2\16\20\3"+
-		"\2\21\22\3\2\23\27\3\2\31\36\2\u0088\2\24\3\2\2\2\4\31\3\2\2\2\6%\3\2"+
-		"\2\2\b\62\3\2\2\2\na\3\2\2\2\fj\3\2\2\2\16}\3\2\2\2\20\21\5\4\3\2\21\22"+
-		"\5\2\2\2\22\25\3\2\2\2\23\25\5\4\3\2\24\20\3\2\2\2\24\23\3\2\2\2\25\3"+
-		"\3\2\2\2\26\32\5\6\4\2\27\32\5\b\5\2\30\32\5\n\6\2\31\26\3\2\2\2\31\27"+
-		"\3\2\2\2\31\30\3\2\2\2\32\5\3\2\2\2\33\34\7\3\2\2\34\35\7\4\2\2\35\36"+
-		"\7\6\2\2\36\37\7!\2\2\37&\7!\2\2 !\7\3\2\2!\"\7\5\2\2\"#\7!\2\2#$\7\6"+
-		"\2\2$&\7!\2\2%\33\3\2\2\2% \3\2\2\2&\7\3\2\2\2\'(\7!\2\2()\7\37\2\2)\63"+
-		"\5\f\7\2*+\7!\2\2+,\7\21\2\2,-\7\37\2\2-\63\5\f\7\2./\7!\2\2/\60\7\22"+
-		"\2\2\60\61\7\37\2\2\61\63\5\f\7\2\62\'\3\2\2\2\62*\3\2\2\2\62.\3\2\2\2"+
-		"\63\t\3\2\2\2\64\65\7\7\2\2\65\66\7\n\2\2\66\67\5\16\b\2\678\7\13\2\2"+
-		"89\7\f\2\29:\5\2\2\2:;\7\r\2\2;<\7\b\2\2<=\7\n\2\2=>\5\16\b\2>?\7\13\2"+
-		"\2?@\7\f\2\2@A\5\2\2\2AB\7\r\2\2BC\7\t\2\2CD\7\n\2\2DE\5\16\b\2EF\7\13"+
-		"\2\2FG\7\f\2\2GH\5\2\2\2HI\7\r\2\2Ib\3\2\2\2JK\7\7\2\2KL\7\n\2\2LM\5\16"+
-		"\b\2MN\7\13\2\2NO\7\f\2\2OP\5\2\2\2PQ\7\r\2\2QR\7\t\2\2RS\7\n\2\2ST\5"+
-		"\16\b\2TU\7\13\2\2UV\7\f\2\2VW\5\2\2\2WX\7\r\2\2Xb\3\2\2\2YZ\7\7\2\2Z"+
-		"[\7\n\2\2[\\\5\16\b\2\\]\7\13\2\2]^\7\f\2\2^_\5\2\2\2_`\7\r\2\2`b\3\2"+
-		"\2\2a\64\3\2\2\2aJ\3\2\2\2aY\3\2\2\2b\13\3\2\2\2cd\b\7\1\2de\7\n\2\2e"+
-		"f\5\f\7\2fg\7\13\2\2gk\3\2\2\2hk\7!\2\2ik\7 \2\2jc\3\2\2\2jh\3\2\2\2j"+
-		"i\3\2\2\2kz\3\2\2\2lm\f\b\2\2mn\t\2\2\2ny\5\f\7\top\f\7\2\2pq\t\3\2\2"+
-		"qy\5\f\7\brs\f\6\2\2st\t\4\2\2ty\5\f\7\7uv\f\5\2\2vw\7\30\2\2wy\5\f\7"+
-		"\5xl\3\2\2\2xo\3\2\2\2xr\3\2\2\2xu\3\2\2\2y|\3\2\2\2zx\3\2\2\2z{\3\2\2"+
-		"\2{\r\3\2\2\2|z\3\2\2\2}~\5\f\7\2~\177\t\5\2\2\177\u0080\5\f\7\2\u0080"+
-		"\17\3\2\2\2\n\24\31%\62ajxz";
+		"\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6e\n\6\3\7\3\7\3\7\3\7"+
+		"\3\7\3\7\3\7\5\7n\n\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7"+
+		"\7\7|\n\7\f\7\16\7\177\13\7\3\b\3\b\3\b\3\b\3\b\2\3\f\t\2\4\6\b\n\f\16"+
+		"\2\7\3\2\b\n\3\2\22\24\3\2\25\26\3\2\27\33\3\2\35\"\2\u008c\2\24\3\2\2"+
+		"\2\4\31\3\2\2\2\6(\3\2\2\2\b\65\3\2\2\2\nd\3\2\2\2\fm\3\2\2\2\16\u0080"+
+		"\3\2\2\2\20\21\5\4\3\2\21\22\5\2\2\2\22\25\3\2\2\2\23\25\5\4\3\2\24\20"+
+		"\3\2\2\2\24\23\3\2\2\2\25\3\3\2\2\2\26\32\5\6\4\2\27\32\5\b\5\2\30\32"+
+		"\5\n\6\2\31\26\3\2\2\2\31\27\3\2\2\2\31\30\3\2\2\2\32\5\3\2\2\2\33\34"+
+		"\7\3\2\2\34\35\7\4\2\2\35\36\7\6\2\2\36\37\7%\2\2\37)\7%\2\2 !\7\3\2\2"+
+		"!\"\7\5\2\2\"#\7%\2\2#$\7\6\2\2$)\7%\2\2%&\7\3\2\2&\'\7\7\2\2\')\t\2\2"+
+		"\2(\33\3\2\2\2( \3\2\2\2(%\3\2\2\2)\7\3\2\2\2*+\7%\2\2+,\7#\2\2,\66\5"+
+		"\f\7\2-.\7%\2\2./\7\25\2\2/\60\7#\2\2\60\66\5\f\7\2\61\62\7%\2\2\62\63"+
+		"\7\26\2\2\63\64\7#\2\2\64\66\5\f\7\2\65*\3\2\2\2\65-\3\2\2\2\65\61\3\2"+
+		"\2\2\66\t\3\2\2\2\678\7\13\2\289\7\16\2\29:\5\16\b\2:;\7\17\2\2;<\7\20"+
+		"\2\2<=\5\2\2\2=>\7\21\2\2>?\7\f\2\2?@\7\16\2\2@A\5\16\b\2AB\7\17\2\2B"+
+		"C\7\20\2\2CD\5\2\2\2DE\7\21\2\2EF\7\r\2\2FG\7\16\2\2GH\5\16\b\2HI\7\17"+
+		"\2\2IJ\7\20\2\2JK\5\2\2\2KL\7\21\2\2Le\3\2\2\2MN\7\13\2\2NO\7\16\2\2O"+
+		"P\5\16\b\2PQ\7\17\2\2QR\7\20\2\2RS\5\2\2\2ST\7\21\2\2TU\7\r\2\2UV\7\16"+
+		"\2\2VW\5\16\b\2WX\7\17\2\2XY\7\20\2\2YZ\5\2\2\2Z[\7\21\2\2[e\3\2\2\2\\"+
+		"]\7\13\2\2]^\7\16\2\2^_\5\16\b\2_`\7\17\2\2`a\7\20\2\2ab\5\2\2\2bc\7\21"+
+		"\2\2ce\3\2\2\2d\67\3\2\2\2dM\3\2\2\2d\\\3\2\2\2e\13\3\2\2\2fg\b\7\1\2"+
+		"gh\7\16\2\2hi\5\f\7\2ij\7\17\2\2jn\3\2\2\2kn\7%\2\2ln\7$\2\2mf\3\2\2\2"+
+		"mk\3\2\2\2ml\3\2\2\2n}\3\2\2\2op\f\b\2\2pq\t\3\2\2q|\5\f\7\trs\f\7\2\2"+
+		"st\t\4\2\2t|\5\f\7\buv\f\6\2\2vw\t\5\2\2w|\5\f\7\7xy\f\5\2\2yz\7\34\2"+
+		"\2z|\5\f\7\5{o\3\2\2\2{r\3\2\2\2{u\3\2\2\2{x\3\2\2\2|\177\3\2\2\2}{\3"+
+		"\2\2\2}~\3\2\2\2~\r\3\2\2\2\177}\3\2\2\2\u0080\u0081\5\f\7\2\u0081\u0082"+
+		"\t\6\2\2\u0082\u0083\5\f\7\2\u0083\17\3\2\2\2\n\24\31(\65dm{}";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -45,6 +45,13 @@ public interface FactorioScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCompilerAlias(FactorioScriptParser.CompilerAliasContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code CompilerPowerpole}
+	 * labeled alternative in {@link FactorioScriptParser#statementCompiler}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCompilerPowerpole(FactorioScriptParser.CompilerPowerpoleContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code overwriteStatementAssign}
 	 * labeled alternative in {@link FactorioScriptParser#statementAssign}.
 	 * @param ctx the parse tree
