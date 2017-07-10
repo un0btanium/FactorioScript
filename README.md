@@ -40,7 +40,7 @@ iron-ore = 6 * 7
 iron-ore = 142 % 100
 ```
 
-Of course you can do math with variables/signals as well:
+Of course, you can do math with variables/signals as well:
 
 ```FactorioScript
 iron-ore = copper-ore + 42
@@ -50,19 +50,19 @@ iron-ore = copper-ore * 42
 iron-ore = copper-ore % 42
 ```
 
-Of course, You can chain multiple expressions:
+You can chain multiple expressions:
 
 ```FactorioScript
 iron-ore = copper-ore + 42 * coal / stone - signal-A
 ```
 
-You can add parentheses to force the order of expression evaluation. The following expression would first devide coal by stone then multiple by 42.
+You can use parentheses to force the order of expression evaluation. The following expression would first devide coal by stone then multiple with 42.
 
 ```FactorioScript
 iron-ore = copper-ore + 42 * (coal / stone) - signal-A
 ```
 
-If you dont want to override a variable but rather want to add or subtractyou can use:
+If you dont want to override a variable but rather want to add or subtract you can use:
 
 ```FactorioScript
 iron-ore = iron-ore + 42
@@ -76,7 +76,7 @@ iron-ore -= 42
 
 There are a few, but very powerful compiler settings you can use.  
 
-**Aliases**
+**Aliases**  
 You can give a signal a custom variable name:
 ```FactorioScript
 # ALIAS copper-ore => myAwesomeVariable
@@ -89,14 +89,16 @@ The above would be the same as:
 iron-ore = copper-ore + 42
 ```
 
-**Standard temporary variables**
-This one will probably very rarely be used and not as easy to explain as everything else, but bare with me.
+Just make sure your variable names start with a lowercase letter.
+
+**Standard temporary variables**  
+This one will probably be very rarely used and is not as easy to explain, but bare with me.
 If you have a statement like this
 
 ```FactorioScript
 iron-ore = copper-ore + stone + coal + uranium-ore
 ```
-it will create a chain of arithmetic combinators, calculation one expression and transfering the result to the next one. The signal used to transfer the result are the standard temporary variables.  
+it will create a chain of arithmetic combinators, calculating one expression after another, which requires the result to be transfered to the next combinator. The signals used to transfer the results are the standard temporary variables.  
 You should avoid using these two variables in your code, but if you need them, you can change them to a different signal you current are not using.
 
 ```FactorioScript
@@ -108,9 +110,7 @@ The standard settings are
 # STANDARD => signal-Y signal-Z
 ```
 So, if you need *signal-Y* and *signal-Z* in your equations, just change them with this compiler statement.  
-If you dont, your results will be messed up.
-
-Just make sure your variable names start with a lowercase letter.
+If you dont do that, your results will be messed up.
 
 
 ## Ingame Usage
@@ -130,6 +130,7 @@ Well, i would like to add everything, but here is a good starting selection:
 * More direct assign statements (*=, /=, ^=, ect)
 * IF statements
 * select your power pole of choice
+* Math and Util library
 
 
 ## Libraries
