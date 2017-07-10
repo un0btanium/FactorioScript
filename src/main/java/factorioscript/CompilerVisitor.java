@@ -3,12 +3,14 @@ package factorioscript;
 import antlr.FactorioScriptBaseVisitor;
 import antlr.FactorioScriptParser.AddStatementAssignContext;
 import antlr.FactorioScriptParser.AddSubExpContext;
+import antlr.FactorioScriptParser.BitExpContext;
 import antlr.FactorioScriptParser.CompilerAliasContext;
 import antlr.FactorioScriptParser.CompilerStandardContext;
-import antlr.FactorioScriptParser.MulDivExpContext;
+import antlr.FactorioScriptParser.MulDivModExpContext;
 import antlr.FactorioScriptParser.MultipleStatementListContext;
 import antlr.FactorioScriptParser.NumExpContext;
 import antlr.FactorioScriptParser.OverwriteStatementAssignContext;
+import antlr.FactorioScriptParser.PowExpContext;
 import antlr.FactorioScriptParser.PriorityExpContext;
 import antlr.FactorioScriptParser.SingleStatementListContext;
 import antlr.FactorioScriptParser.StatementContext;
@@ -120,61 +122,9 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 		return visit(ctx.expr);
 	}
 	
+
 	@Override
-	public CompilerEntity visitAddSubExp(AddSubExpContext ctx) {
-		log("AddSubExp");
-		
-		ArithmeticCombinator ac = new ArithmeticCombinator();
-		ac.leftEntity = visit(ctx.left);
-		ac.operation = ctx.operand.getText();
-		ac.rightEntity = visit(ctx.right);
-		
-		// NUMBER OPTIMIZATION
-		boolean leftIsNumber = ac.leftEntity.getClass() == Number.class;
-		boolean rightIsNumber = ac.rightEntity.getClass() == Number.class;
-		if (ac.operation.equals("+")) {
-			if (leftIsNumber && rightIsNumber) {
-				Number left = (Number) ac.leftEntity;
-				Number right = (Number) ac.rightEntity;
-				return new Number(left.getValue() + right.getValue());
-			} else if (leftIsNumber) {
-				CompilerEntity temp = ac.leftEntity;
-				ac.leftEntity = ac.rightEntity;
-				ac.rightEntity = temp;
-			}
-		} else {
-			if (leftIsNumber && rightIsNumber) {
-				Number left = (Number) ac.leftEntity;
-				Number right = (Number) ac.rightEntity;
-				return new Number(left.getValue() - right.getValue());
-			} else if (leftIsNumber) {
-				// CREATE CONSTANT COMBINATOR IF LEFT IS NUMBER
-				ConstantCombinator cc = new ConstantCombinator();
-				Number number = (Number) ac.leftEntity;
-				cc.addSignal(standard_left, number.getValue());
-				ac.leftEntity = cc;
-			}
-		}
-		
-		
-		
-		// SET PARENT OF LEFT AND RIGHT ARITHMETICCOMBINATORS
-		if (ac.leftEntity.getClass() == ArithmeticCombinator.class) {
-			ArithmeticCombinator left = (ArithmeticCombinator) ac.leftEntity;
-			left.outputEntity = ac;
-			left.outputSignal = standard_left;
-		}
-		if (ac.rightEntity.getClass() == ArithmeticCombinator.class) {
-			ArithmeticCombinator right = (ArithmeticCombinator) ac.rightEntity;
-			right.outputEntity = ac;
-			right.outputSignal = standard_right;
-		}
-		
-		return ac;
-	}
-	
-	@Override
-	public CompilerEntity visitMulDivExp(MulDivExpContext ctx) {
+	public CompilerEntity visitMulDivModExp(MulDivModExpContext ctx) {
 		log("MulDivExp");
 		
 		ArithmeticCombinator ac = new ArithmeticCombinator();
@@ -236,9 +186,148 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 	}
 	
 	@Override
-	public CompilerEntity visitNumExp(NumExpContext ctx) {
-		log("NumExp");
-		return new Number(Integer.parseInt(ctx.number.getText()));
+	public CompilerEntity visitAddSubExp(AddSubExpContext ctx) {
+		log("AddSubExp");
+		
+		ArithmeticCombinator ac = new ArithmeticCombinator();
+		ac.leftEntity = visit(ctx.left);
+		ac.operation = ctx.operand.getText();
+		ac.rightEntity = visit(ctx.right);
+		
+		// NUMBER OPTIMIZATION
+		boolean leftIsNumber = ac.leftEntity.getClass() == Number.class;
+		boolean rightIsNumber = ac.rightEntity.getClass() == Number.class;
+		if (ac.operation.equals("+")) {
+			if (leftIsNumber && rightIsNumber) {
+				Number left = (Number) ac.leftEntity;
+				Number right = (Number) ac.rightEntity;
+				return new Number(left.getValue() + right.getValue());
+			} else if (leftIsNumber) {
+				CompilerEntity temp = ac.leftEntity;
+				ac.leftEntity = ac.rightEntity;
+				ac.rightEntity = temp;
+			}
+		} else {
+			if (leftIsNumber && rightIsNumber) {
+				Number left = (Number) ac.leftEntity;
+				Number right = (Number) ac.rightEntity;
+				return new Number(left.getValue() - right.getValue());
+			} else if (leftIsNumber) {
+				// CREATE CONSTANT COMBINATOR IF LEFT IS NUMBER
+				ConstantCombinator cc = new ConstantCombinator();
+				Number number = (Number) ac.leftEntity;
+				cc.addSignal(standard_left, number.getValue());
+				ac.leftEntity = cc;
+			}
+		}
+		
+		
+		
+		// SET PARENT OF LEFT AND RIGHT ARITHMETICCOMBINATORS
+		if (ac.leftEntity.getClass() == ArithmeticCombinator.class) {
+			ArithmeticCombinator left = (ArithmeticCombinator) ac.leftEntity;
+			left.outputEntity = ac;
+			left.outputSignal = standard_left;
+		}
+		if (ac.rightEntity.getClass() == ArithmeticCombinator.class) {
+			ArithmeticCombinator right = (ArithmeticCombinator) ac.rightEntity;
+			right.outputEntity = ac;
+			right.outputSignal = standard_right;
+		}
+		
+		return ac;
+	}
+	
+	@Override
+	public CompilerEntity visitBitExp(BitExpContext ctx) {
+		log("BitExp");
+		
+		ArithmeticCombinator ac = new ArithmeticCombinator();
+		ac.leftEntity = visit(ctx.left);
+		ac.operation = ctx.operand.getText();
+		ac.rightEntity = visit(ctx.right);
+		
+		// NUMBER OPTIMIZATION
+		boolean leftIsNumber = ac.leftEntity.getClass() == Number.class;
+		boolean rightIsNumber = ac.rightEntity.getClass() == Number.class;
+		if (leftIsNumber && rightIsNumber) {
+			// CALCUALTE
+			Number left = (Number) ac.leftEntity;
+			Number right = (Number) ac.rightEntity;
+			if (ac.operation.equals("<<")) {
+				return new Number( left.getValue() << right.getValue() );
+			} else if (ac.operation.equals(">>")) {
+				return new Number( left.getValue() >> right.getValue() );
+			} else if (ac.operation.equals("AND")) {
+				return new Number( left.getValue() & right.getValue() );
+			} else if (ac.operation.equals("OR")) {
+				return new Number( left.getValue() | right.getValue() );
+			} else /* XOR */ {
+				return new Number( left.getValue() ^ right.getValue() );
+			}
+		} else if (leftIsNumber) {
+			// CREATE CONSTANT COMBINATOR IF LEFT IS NUMBER
+			ConstantCombinator cc = new ConstantCombinator();
+			Number number = (Number) ac.leftEntity;
+			cc.addSignal(standard_left, number.getValue());
+			ac.leftEntity = cc;
+		}
+		
+		
+		// SET PARENT OF LEFT AND RIGHT ARITHMETICCOMBINATORS
+		if (ac.leftEntity.getClass() == ArithmeticCombinator.class) {
+			ArithmeticCombinator left = (ArithmeticCombinator) ac.leftEntity;
+			left.outputEntity = ac;
+			left.outputSignal = standard_left;
+		}
+		if (ac.rightEntity.getClass() == ArithmeticCombinator.class) {
+			ArithmeticCombinator right = (ArithmeticCombinator) ac.rightEntity;
+			right.outputEntity = ac;
+			right.outputSignal = standard_right;
+		}
+		
+		return ac;
+	}
+	
+	@Override
+	public CompilerEntity visitPowExp(PowExpContext ctx) {
+		log("PowExp");
+		
+		ArithmeticCombinator ac = new ArithmeticCombinator();
+		ac.leftEntity = visit(ctx.left);
+		ac.operation = "^";
+		ac.rightEntity = visit(ctx.right);
+		
+		// NUMBER OPTIMIZATION
+		boolean leftIsNumber = ac.leftEntity.getClass() == Number.class;
+		boolean rightIsNumber = ac.rightEntity.getClass() == Number.class;
+		if (leftIsNumber && rightIsNumber) {
+			// CALCUALTE
+			Number left = (Number) ac.leftEntity;
+			Number right = (Number) ac.rightEntity;
+			return new Number( (int) Math.pow(left.getValue(), right.getValue()) );
+		} else if (leftIsNumber) {
+			// CREATE CONSTANT COMBINATOR IF LEFT IS NUMBER
+			ConstantCombinator cc = new ConstantCombinator();
+			Number number = (Number) ac.leftEntity;
+			cc.addSignal(standard_left, number.getValue());
+			ac.leftEntity = cc;
+		}
+		
+		
+		// SET PARENT OF LEFT AND RIGHT ARITHMETICCOMBINATORS
+		if (ac.leftEntity.getClass() == ArithmeticCombinator.class) {
+			ArithmeticCombinator left = (ArithmeticCombinator) ac.leftEntity;
+			left.outputEntity = ac;
+			left.outputSignal = standard_left;
+		}
+		if (ac.rightEntity.getClass() == ArithmeticCombinator.class) {
+			ArithmeticCombinator right = (ArithmeticCombinator) ac.rightEntity;
+			right.outputEntity = ac;
+			right.outputSignal = standard_right;
+		}
+		
+		return ac;
 	}
 	
 	
@@ -249,6 +338,16 @@ public class CompilerVisitor  extends FactorioScriptBaseVisitor<CompilerEntity> 
 			System.err.println("Variable " + ctx.getText() + " does not exist!");
 		return new Variable(ctx.getText());
 	}
+	
+	@Override
+	public CompilerEntity visitNumExp(NumExpContext ctx) {
+		log("NumExp");
+		return new Number(Integer.parseInt(ctx.number.getText()));
+	}
+	
+	
+	
+	
 	
 	public void log(String str) {
 		//System.out.println(str);
