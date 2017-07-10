@@ -49,6 +49,7 @@ iron-ore = copper-ore - 42
 iron-ore = copper-ore / 42
 iron-ore = copper-ore * 42
 iron-ore = copper-ore % 42
+iron-ore = copper-ore ^ 42
 ```
 
 You can chain multiple expressions:
@@ -100,12 +101,13 @@ The above would be the same as:
 iron-ore = copper-ore + 42
 ```
 
-Just make sure your variable names start with a lowercase letter.
-
+When defining your own variable names make sure you start with a lowercase letter.
+If you define a aliases, the old variable name is still available and can still be used.
 There are some aliases already predefined. For example *signal-A* is available as *signal-a* and *a*. Color signals like *signal-blue* are available as *blue* as well.
 
+
 **Power poles**
-You can define the type of power pole used and the program will space them out accordingly. There are available: small , medium and substation.
+You can define the type of power pole that will be used and the program will space them out accordingly. There are available: small , medium and substation.
 The standard is small power poles.
 
 The above would be the same as:
@@ -116,7 +118,6 @@ The above would be the same as:
 ```
 
 
-
 **Standard temporary variables**  
 This one will probably be very rarely used and is not as easy to explain, but bare with me.
 If you have a statement like this
@@ -124,8 +125,8 @@ If you have a statement like this
 ```FactorioScript
 iron-ore = copper-ore + stone + coal + uranium-ore
 ```
-it will create a chain of arithmetic combinators, calculating one expression after another, which requires the result to be transfered to the next combinator. The signals used to transfer the results are the standard temporary variables.  
-You should avoid using these two variables in your code, but if you need them, you can change them to a different signal you current are not using.
+it will create a chain of arithmetic combinators, calculating one expression after another, which requires the result to be transfered to the next combinator. The signals used to transfer the results are called the *standard temporary variables*.  
+You should avoid using these two variables in your code, but if you need them, you can change them to a different signal you are not using in your script.
 
 ```FactorioScript
 # STANDARD => <variableLeft> <variableRight>
@@ -135,8 +136,7 @@ The standard settings are
 ```FactorioScript
 # STANDARD => signal-Y signal-Z
 ```
-So, if you need *signal-Y* and *signal-Z* in your equations, just change them with this compiler statement.  
-If you dont do that, your results will be messed up.
+So, if you use *signal-Y* and *signal-Z* in your equations, change them with this compiler statement. If you dont do that, your results will be messed up.
 
 
 ## Ingame Usage
