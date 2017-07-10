@@ -94,12 +94,12 @@ public interface FactorioScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarExp(FactorioScriptParser.VarExpContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code mulDivExp}
+	 * Visit a parse tree produced by the {@code mulDivModExp}
 	 * labeled alternative in {@link FactorioScriptParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMulDivExp(FactorioScriptParser.MulDivExpContext ctx);
+	T visitMulDivModExp(FactorioScriptParser.MulDivModExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code powExp}
 	 * labeled alternative in {@link FactorioScriptParser#expression}.
@@ -107,6 +107,13 @@ public interface FactorioScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPowExp(FactorioScriptParser.PowExpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code bitExp}
+	 * labeled alternative in {@link FactorioScriptParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBitExp(FactorioScriptParser.BitExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code priorityExp}
 	 * labeled alternative in {@link FactorioScriptParser#expression}.

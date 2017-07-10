@@ -150,17 +150,17 @@ public interface FactorioScriptListener extends ParseTreeListener {
 	 */
 	void exitVarExp(FactorioScriptParser.VarExpContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code mulDivExp}
+	 * Enter a parse tree produced by the {@code mulDivModExp}
 	 * labeled alternative in {@link FactorioScriptParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterMulDivExp(FactorioScriptParser.MulDivExpContext ctx);
+	void enterMulDivModExp(FactorioScriptParser.MulDivModExpContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code mulDivExp}
+	 * Exit a parse tree produced by the {@code mulDivModExp}
 	 * labeled alternative in {@link FactorioScriptParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitMulDivExp(FactorioScriptParser.MulDivExpContext ctx);
+	void exitMulDivModExp(FactorioScriptParser.MulDivModExpContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code powExp}
 	 * labeled alternative in {@link FactorioScriptParser#expression}.
@@ -173,6 +173,18 @@ public interface FactorioScriptListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPowExp(FactorioScriptParser.PowExpContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code bitExp}
+	 * labeled alternative in {@link FactorioScriptParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBitExp(FactorioScriptParser.BitExpContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code bitExp}
+	 * labeled alternative in {@link FactorioScriptParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBitExp(FactorioScriptParser.BitExpContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code priorityExp}
 	 * labeled alternative in {@link FactorioScriptParser#expression}.

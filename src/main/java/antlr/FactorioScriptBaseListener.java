@@ -160,13 +160,13 @@ public class FactorioScriptBaseListener implements FactorioScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMulDivExp(FactorioScriptParser.MulDivExpContext ctx) { }
+	@Override public void enterMulDivModExp(FactorioScriptParser.MulDivModExpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMulDivExp(FactorioScriptParser.MulDivExpContext ctx) { }
+	@Override public void exitMulDivModExp(FactorioScriptParser.MulDivModExpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -179,6 +179,18 @@ public class FactorioScriptBaseListener implements FactorioScriptListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPowExp(FactorioScriptParser.PowExpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBitExp(FactorioScriptParser.BitExpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBitExp(FactorioScriptParser.BitExpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
