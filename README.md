@@ -108,7 +108,6 @@ There are some aliases already predefined. For example *signal-A* is available a
 You can define the type of power pole used and the program will space them out accordingly. There are available: small , medium and substation.
 The standard is small power poles.
 
-The above would be the same as:
 ```FactorioScript
 # POWERPOLE small
 # POWERPOLE medium
@@ -124,7 +123,7 @@ If you have a statement like this
 ```FactorioScript
 iron-ore = copper-ore + stone + coal + uranium-ore
 ```
-it will create a chain of arithmetic combinators, calculating one expression after another, which requires the result to be transfered to the next combinator. The signals used to transfer the results are the standard temporary variables.  
+it will create a chain of arithmetic combinators, calculating one expression after another, which requires the result to be transfered to the next combinator. The signals used to transfer the results are the standard temporary variables *signal-Y* and *signal-Z*.  
 You should avoid using these two variables in your code, but if you need them, you can change them to a different signal you current are not using.
 
 ```FactorioScript
