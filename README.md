@@ -57,10 +57,10 @@ You can chain multiple expressions:
 iron-ore = copper-ore + 42 * coal / stone - signal-A
 ```
 
-You can use parentheses to force the order of expression evaluation. The following expression would first devide coal by stone then multiple with 42.
+You can use parentheses to force the order of expression evaluation. The following expression would first add copper-ore and 42 then multiply with the coal signal.
 
 ```FactorioScript
-iron-ore = copper-ore + 42 * (coal / stone) - signal-A
+iron-ore = (copper-ore + 42) * coal / stone - signal-A
 ```
 
 If you dont want to override a variable but rather want to add or subtract you can use:
